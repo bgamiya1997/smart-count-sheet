@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ SMART COUNT SHEET</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Space+Grotesk:wght=400;500;700;800&family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; }
+    
+    /* 🌌 Cosmic Background Setup */
+    body { 
+      background: #020208; 
+      color: #f1f5f9; 
+      font-family: 'Inter', sans-serif; 
+      margin: 0; 
+      padding: 30px 15px; 
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 15% 25%, rgba(155, 93, 229, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 85% 75%, rgba(0, 245, 212, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(0, 187, 249, 0.04) 0%, transparent 60%);
+      z-index: -1;
+      pointer-events: none;
+      animation: nebulaPulse 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes nebulaPulse {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+      100% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+    }
+    
+    td, tr { transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); }
+
+    /* 🏛️ Header Styling */
+    .header-container { text-align: center; margin-bottom: 45px; position: relative; z-index: 2; }
+    
+    .main-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 44px; 
+      font-weight: 900; 
+      letter-spacing: 10px; 
+      margin: 0;
+      text-transform: uppercase;
+      background: linear-gradient(45deg, #00f5d4 0%, #00bbf9 25%, #9b5de5 50%, #f3e5ab 75%, #00f5d4 100%);
+      background-size: 400% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: futuristicColorShift 8s ease infinite;
+      filter: drop-shadow(0 2px 25px rgba(0, 245, 212, 0.3));
+    }
+
+    @keyframes futuristicColorShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .subtitle { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px; 
+      color: #64748b; 
+      text-transform: uppercase; 
+      letter-spacing: 6px; 
+      margin-top: 12px; 
+      font-weight: 500; 
+      opacity: 0.8;
+    }
+
+    /* KPI Grid Setup */
+    .stats-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+      gap: 25px; 
+      margin-bottom: 45px; 
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* 🎯 Premium Transparent Glassmorphic Base + Clickable Effect */
+    .card {
+      background: rgba(4, 6, 15, 0.4); 
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 16px; 
+      padding: 16px 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; 
+      align-items: center;     
+      text-align: center;
+      height: 110px; 
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+    }
+    
+    /* Clickable Cards Interactivity */
+    .card.top, .card.bottom {
+      cursor: pointer;
+      user-select: none;
+    }
+    .card.top:active, .card.bottom:active {
+      transform: scale(0.95);
+    }
+
+    /* 💨 Smooth Breathing Glow Animations */
+    
+    /* 🏆 TOP PERFORMER */
+    .card.top {
+      border: 1.5px solid rgba(212, 175, 55, 0.4);
+      animation: goldBreathing 4s ease-in-out infinite alternate;
+    }
+    @keyframes goldBreathing {
+      0% { border-color: rgba(212, 175, 55, 0.25); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 10px rgba(212, 175, 55, 0.05); }
+      100% { border-color: rgba(212, 175, 55, 0.7); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 25px rgba(212, 175, 55, 0.25); }
+    }
+
+    /* 🚨 LOWEST OUTPUT */
+    .card.bottom {
+      border: 1.5px solid rgba(255, 51, 102, 0.4);
+      animation: redBreathing 4s ease-in-out infinite alternate;
+    }
+    @keyframes redBreathing {
+      0% { border-color: rgba(255, 51, 102, 0.25); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 10px rgba(255, 51, 102, 0.05); }
+      100% { border-color: rgba(255, 51, 102, 0.7); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 25px rgba(255, 51, 102, 0.25); }
+    }
+
+    /* 📊 TEAM TOTAL CARD */
+    .card.progress-box { border: 1.5px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+    .card.progress-box.glow-yellow { animation: yellowBreathing 4s ease-in-out infinite alternate; }
+    @keyframes yellowBreathing {
+      0% { border-color: rgba(243, 229, 171, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 8px rgba(243, 229, 171, 0.05); }
+      100% { border-color: rgba(243, 229, 171, 0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(243, 229, 171, 0.2); }
+    }
+    .card.progress-box.glow-green { animation: greenBreathing 4s ease-in-out infinite alternate; }
+    @keyframes greenBreathing {
+      0% { border-color: rgba(0, 245, 212, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 8px rgba(0, 245, 212, 0.05); }
+      100% { border-color: rgba(0, 245, 212, 0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(0, 245, 212, 0.2); }
+    }
+    .card.progress-box.glow-white { animation: whiteBreathing 4s ease-in-out infinite alternate; }
+    @keyframes whiteBreathing {
+      0% { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 10px rgba(255, 255, 255, 0.05); }
+      100% { border-color: rgba(255, 255, 255, 0.7); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 25px rgba(255, 255, 255, 0.25); }
+    }
+
+    /* Labels Layout styling */
+    .card-label { 
+      font-family: 'Space Grotesk', sans-serif; 
+      font-size: 10px; 
+      color: #64748b; 
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+      font-weight: 700; 
+      margin-bottom: 6px; 
+      width: 100%;
+    }
+    
+    .card-val { 
+      font-family: 'Space Grotesk', sans-serif; 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: #ffffff; 
+      width: 100%;
+      line-height: 1.2;
+    }
+
+    /* 🎆 Falling Emoji Particle FX Elements */
+    .particle-fx {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 28px;
+      animation: fallAndSpin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes fallAndSpin {
+      0% {
+        transform: translateY(-50px) translateX(0) rotate(0deg) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(0) translateX(0) rotate(20deg) scale(1.2);
+      }
+      100% {
+        transform: translateY(105vh) translateX(var(--drift)) rotate(var(--spin)) scale(0.6);
+        opacity: 0;
+      }
+    }
+
+    /* 📊 Grid Column Table System */
+    .table-container { 
+      background: rgba(4, 6, 15, 0.5); 
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.04); 
+      border-radius: 20px; 
+      overflow-x: auto; 
+      box-shadow: 0 30px 60px rgba(0,0,0,0.7); 
+      max-width: 1600px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 2;
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+    
+    th { 
+      font-family: 'Space Grotesk', sans-serif; 
+      background: rgba(2, 3, 8, 0.85); 
+      color: #00bbf9; 
+      padding: 18px 12px; 
+      font-size: 12px; 
+      font-weight: 700; 
+      letter-spacing: 1px; 
+      text-transform: uppercase; 
+      text-align: center; 
+      border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.03); 
+    }
+    th:first-child, th:nth-child(2) { text-align: left; padding-left: 20px; } 
+    th:last-child { border-right: none; }
+
+    td { 
+      padding: 15px 12px; 
+      font-size: 13px; 
+      font-weight: 500;
+      color: #cbd5e1; 
+      text-align: center; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02); 
+      border-right: 1px solid rgba(255, 255, 255, 0.02);  
+    }
+    td:first-child, td:nth-child(2) { text-align: left; padding-left: 20px; } 
+    td:last-child { border-right: none; }
+    
+    tr:nth-child(even) { background: rgba(255, 255, 255, 0.01); }
+    tr:hover td { background: rgba(0, 187, 249, 0.06); color: #ffffff; border-right: 1px solid rgba(0, 187, 249, 0.1); }
+    
+    .task-cell { color: #94a3b8; font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+    .num-col { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #00f5d4; }
+    .emoji-cell { font-size: 22px; text-align: center; }
+    
+    .se-positive { color: #2ecc71; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    .se-negative { color: #ff3366; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+    .footer-credits {
+      text-align: center; 
+      font-family: 'Space Grotesk', sans-serif; 
+      font-size: 11px; 
+      color: #00f5d4; 
+      margin-top: 50px; 
+      padding: 20px; 
+      letter-spacing: 3px; 
+      text-transform: uppercase;
+      border-top: 1px solid rgba(255, 255, 255, 0.02);
+      font-weight: bold;
+      text-shadow: 0 0 15px rgba(0, 245, 212, 0.6);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .status-indicator { text-align: right; font-family: 'Space Grotesk', sans-serif; font-size: 9px; color: #1e293b; margin-top: 12px; letter-spacing: 1.5px; max-width: 1600px; margin-left: auto; margin-right: auto; position: relative; z-index: 2; }
+  </style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="header-container">
+    <div class="main-title">SMART COUNT SHEET</div>
+    <div class="subtitle">Realtime Retail Execution Control Portal</div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="card top" onclick="triggerCelebration()">
+      <div class="card-label" style="color: #d4af37;">🏆 TOP PERFORMER</div>
+      <div class="card-val" id="top-perf">Connecting...</div>
+    </div>
+    
+    <div class="card bottom" onclick="triggerRage()">
+      <div class="card-label" style="color: #ff3366;">⚠️ LOWEST OUTPUT</div>
+      <div class="card-val" id="bot-perf">Connecting...</div>
+    </div>
+    
+    <div class="card progress-box" id="team-card">
+      <div class="card-label">⚡ TEAM TOTAL</div>
+      <div class="card-val" id="total-prog">Connecting...</div>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>GID</th>
+          <th>Name</th>
+          <th>Target</th>
+          <th>S/E</th>
+          <th>Offline Pricing</th>
+          <th>Voting Pricing</th>
+          <th>E/Masking</th>
+          <th>R/Masking</th>
+          <th>Stitching</th>
+          <th>Total Prob</th>
+          <th>Total Deno</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr>
+          <td colspan="12" style="text-align:center; padding:50px; color:#475569; font-family:'Space Grotesk'; font-size:15px;">ENGAGING PLANETARY COSMIC CORES...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="status-indicator" id="sync-time">PORTAL INITIALIZING...</div>
+
+  <div class="footer-credits">
+    POWERED BY AMITH PRIYANKA
+  </div>
+
+  <script>
+    const APPS_SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbwjai5efqLN-raaTJgDb9fLxkGXRFDnpK4ZlMtASJ41OCcDGodnkDB1CNewut-YHG7FvA/exec";
+
+    // Audio Context Initializer for Synthesizer Sound Effects
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // 🏆 Winner Synth Sound Generator Code
+    function playWinnerSound() {
+      initAudio();
+      const now = audioCtx.currentTime;
+      
+      // Melody Notes Structure (Arpeggio effect for victory)
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, index) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + index * 0.1);
+        
+        gain.gain.setValueAtTime(0.2, now + index * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.1 + 0.4);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(now + index * 0.1);
+        osc.stop(now + index * 0.1 + 0.45);
+      });
+    }
+
+    // 🚨 Loser Synth Sound Generator Code
+    function playLoserSound() {
+      initAudio();
+      const now = audioCtx.currentTime;
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'sawtooth';
+      // Pitch slides downwards dynamically
+      osc.frequency.setValueAtTime(220, now); // A3 Note
+      osc.frequency.linearRampToValueAtTime(110, now + 0.6); // Drops to A2
+      
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.start(now);
+      osc.stop(now + 0.65);
+    }
+
+    // 🎉 Top Ranking Click Celebration Logic
+    function triggerCelebration() {
+      playWinnerSound();
+      const emojis = ['🏆', '✨', '👑', '⭐', '🎉'];
+      for (let i = 0; i < 40; i++) {
+        createParticle(emojis[Math.floor(Math.random() * emojis.length)]);
+      }
+    }
+
+    // 😡 Lowest Performance Click Rage Logic
+    function triggerRage() {
+      playLoserSound();
+      const emojis = ['😡', '💥', '⚠️', '📉', '👎'];
+      for (let i = 0; i < 40; i++) {
+        createParticle(emojis[Math.floor(Math.random() * emojis.length)]);
+      }
+    }
+
+    // Particle Injection Factory
+    function createParticle(emoji) {
+      const p = document.createElement('div');
+      p.className = 'particle-fx';
+      p.innerText = emoji;
+      
+      // Random positions across horizontal span
+      p.style.left = Math.random() * window.innerWidth + 'px';
+      p.style.top = '-40px';
+      
+      // Custom css randomized variables for dynamic physics feel
+      p.style.setProperty('--drift', (Math.random() * 300 - 150) + 'px');
+      p.style.setProperty('--spin', (Math.random() * 720 - 360) + 'deg');
+      p.style.animationDelay = Math.random() * 0.4 + 's';
+      
+      document.body.appendChild(p);
+      
+      // Clean memory after finish
+      setTimeout(() => { p.remove(); }, 3500);
+    }
+
+    // 🌌 Canvas Setup
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let starsArray = [];
+    let planetsArray = [];
+    const maxStars = 150; 
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', function() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    class Star {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 1.6 + 0.2;
+        this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+        this.alpha = Math.random();
+        this.alphaDir = Math.random() > 0.5 ? 1 : -1;
+      }
+      update() {
+        this.alpha += this.twinkleSpeed * this.alphaDir;
+        if (this.alpha >= 1 || this.alpha <= 0.1) this.alphaDir = -this.alphaDir;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+
+    class Planet {
+      constructor(size, color, speed, distanceY) {
+        this.size = size; this.color = color; this.speed = speed;
+        this.angle = Math.random() * Math.PI * 2; this.distanceY = distanceY; 
+        this.baseX = Math.random() * canvas.width;
+      }
+      update() {
+        this.angle += this.speed;
+        this.x = (this.baseX + Math.sin(this.angle) * 40);
+        this.y = this.distanceY;
+      }
+      draw() {
+        ctx.save();
+        ctx.shadowBlur = this.size * 1.5; ctx.shadowColor = this.color;
+        let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.2, this.x, this.y, this.size);
+        gradient.addColorStop(0, '#ffffff'); gradient.addColorStop(0.3, this.color); gradient.addColorStop(1, 'rgba(4, 6, 15, 0.8)');
+        ctx.fillStyle = gradient; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initCosmos() {
+      starsArray = []; planetsArray = [];
+      for (let i = 0; i < maxStars; i++) starsArray.push(new Star());
+      planetsArray.push(new Planet(18, 'rgba(0, 245, 212, 0.25)', 0.001, window.innerHeight * 0.25)); 
+      planetsArray.push(new Planet(32, 'rgba(155, 93, 229, 0.15)', 0.0006, window.innerHeight * 0.7)); 
+      planetsArray.push(new Planet(12, 'rgba(0, 187, 249, 0.2)', 0.0015, window.innerHeight * 0.45)); 
+    }
+
+    function animateCosmos() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < starsArray.length; i++) { starsArray[i].update(); starsArray[i].draw(); }
+      for (let i = 0; i < planetsArray.length; i++) { planetsArray[i].update(); planetsArray[i].draw(); }
+      requestAnimationFrame(animateCosmos);
+    }
+
+    initCosmos(); animateCosmos();
+
+    // Live Fetch System
+    async function fetchRealtimeData() {
+      try {
+        const response = await fetch(APPS_SCRIPT_API_URL);
+        let rows = await response.json();
+        if (!rows || rows.length === 0) return;
+
+        rows.sort((a, b) => (parseFloat(b.totalDeno) || 0) - (parseFloat(a.totalDeno) || 0));
+
+        let totalDenoSum = 0, maxVal = 0, minVal = 999999;
+        let topName = "N/A", bottomName = "N/A";
+        
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = ""; 
+
+        rows.forEach(row => {
+          if(!row.gid) return;
+          let totalDeno = parseFloat(row.totalDeno) || 0;
+          totalDenoSum += totalDeno;
+
+          if (totalDeno > maxVal) { maxVal = totalDeno; topName = row.name; }
+          if (totalDeno <= minVal) { minVal = totalDeno; bottomName = row.name; }
+
+          let seClass = row.se.includes('+') ? 'se-positive' : (row.se.includes('-') ? 'se-negative' : '');
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td style="padding-left: 20px;">${row.gid}</td>
+                          <td style="font-weight:600; color:#ffffff; padding-left: 20px;">${row.name}</td>
+                          <td>${row.target}</td>
+                          <td class="${seClass}">${row.se}</td>
+                          <td class="task-cell">${row.offlinePricing || "0"}</td>
+                          <td class="task-cell">${row.votingPricing || "0"}</td>
+                          <td class="task-cell">${row.eMasking || "0"}</td>
+                          <td class="task-cell">${row.rMasking || "0"}</td>
+                          <td class="task-cell">${row.stitching || "0"}</td>
+                          <td>${row.totalProb}</td>
+                          <td class="num-col">${totalDeno.toFixed(3)}</td>
+                          <td class="emoji-cell">${row.statusEmoji}</td>`;
+          tableBody.appendChild(tr);
+        });
+
+        if (maxVal === 0) topName = "No Output Yet";
+        if (minVal === 999999) minVal = 0;
+
+        document.getElementById('top-perf').innerHTML = `<span style="font-size:13px; font-weight:600; display:block; margin-bottom:4px; color:#cbd5e1;">${topName}</span><span style="color:#e5c158; font-size:22px; font-weight:800; text-shadow: 0 0 10px rgba(229,193,88,0.35);">${maxVal.toFixed(3)}</span>`;
+        document.getElementById('bot-perf').innerHTML = `<span style="font-size:13px; font-weight:600; display:block; margin-bottom:4px; color:#cbd5e1;">${bottomName}</span><span style="color:#ff3366; font-size:22px; font-weight:800; text-shadow: 0 0 10px rgba(255,51,102,0.35);">${minVal.toFixed(3)}</span>`;
+        document.getElementById('total-prog').innerHTML = `${totalDenoSum.toFixed(3)}`;
+        
+        const teamCard = document.getElementById('team-card');
+        teamCard.classList.remove('glow-yellow', 'glow-green', 'glow-white');
+        if (totalDenoSum >= 3000) teamCard.classList.add('glow-white');
+        else if (totalDenoSum >= 2000) teamCard.classList.add('glow-green');
+        else if (totalDenoSum >= 1000) teamCard.classList.add('glow-yellow');
+
+        document.getElementById('sync-time').innerHTML = "SMART CORE: ACTIVE // CLICK EMISSIONS ENABLED";
+      } catch (error) {
+        document.getElementById('sync-time').innerHTML = "SORTING ENGINE ERROR // RETRYING Live LINK...";
+      }
+    }
+
+    window.onload = function() {
+      fetchRealtimeData();
+      setInterval(fetchRealtimeData, 2500); 
+    };
+  </script>
+</body>
+</html>
