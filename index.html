@@ -147,6 +147,14 @@
         const rows = await response.json();
         if (!rows || rows.length === 0) return;
 
+        // --- නව වෙනස්කම: Total Deno අගය වැඩිම එකේ සිට අඩුම එක දක්වා sort කිරීම ---
+        rows.sort((a, b) => {
+          const denoA = parseFloat(a.totalDeno) || 0;
+          const denoB = parseFloat(b.totalDeno) || 0;
+          return denoB - denoA; // වැඩි අගයේ සිට අඩු අගයට (Descending order)
+        });
+        // -------------------------------------------------------------------------
+
         let totalDenoSum = 0;
         let maxDeno = -1;
         let minDeno = 999999;
