@@ -99,7 +99,7 @@
       <div class="card-val" id="bot-perf">Connecting...</div>
     </div>
     
-    <div class="card progress-box" id="team-card">
+    <div class="card progress-box" id="team-card" onclick="playCustomSound()">
       <div class="card-label">⚡ TEAM TOTAL DENO</div>
       <div class="card-val" id="total-prog">Connecting...</div>
     </div>
@@ -135,6 +135,13 @@
   <script>
     const APPS_SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbwjai5efqLN-raaTJgDb9fLxkGXRFDnpK4ZlMtASJ41OCcDGodnkDB1CNewut-YHG7FvA/exec";
 
+    // --- නව ශ්‍රිතය ---
+    function playCustomSound() {
+      const audio = new Audio('https://www.myinstants.com/media/sounds/pissu-hutti.mp3');
+      audio.play().catch(e => console.log("Sound play blocked until user interaction."));
+    }
+    // ------------------
+
     function formatToThreeDecimals(val) {
       if (val === undefined || val === null || val === "") return "0.000";
       let parsed = parseFloat(val);
@@ -147,13 +154,11 @@
         const rows = await response.json();
         if (!rows || rows.length === 0) return;
 
-        // --- නව වෙනස්කම: Total Deno අගය වැඩිම එකේ සිට අඩුම එක දක්වා sort කිරීම ---
         rows.sort((a, b) => {
           const denoA = parseFloat(a.totalDeno) || 0;
           const denoB = parseFloat(b.totalDeno) || 0;
-          return denoB - denoA; // වැඩි අගයේ සිට අඩු අගයට (Descending order)
+          return denoB - denoA; 
         });
-        // -------------------------------------------------------------------------
 
         let totalDenoSum = 0;
         let maxDeno = -1;
@@ -222,7 +227,7 @@
     /* 🔊 ADVANCED SOUND SYNTHESIZER */
     function playVictorySound() {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (ජයග්‍රාහී Arpeggio එකක්)
+      const notes = [523.25, 659.25, 783.99, 1046.50];
       notes.forEach((freq, index) => {
         setTimeout(() => {
           let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
@@ -238,8 +243,8 @@
     function playLoseSound() {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, audioCtx.currentTime); // බර අඩු සවුන්ඩ් එකක්
-      osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.6); // පල්ලෙහාට බහින සවුන්ඩ් එකක්
+      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+      osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.6);
       gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
       osc.connect(gain); gain.connect(audioCtx.destination);
@@ -272,18 +277,15 @@
     function initSpace() {
       canvas.width = window.innerWidth; canvas.height = window.innerHeight;
       spaceElements = [];
-      // දිලිසෙන තරු
       for(let i=0; i<100; i++) {
         spaceElements.push({ type: 'star', x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5, o: Math.random(), speed: 0.01 + Math.random()*0.02 });
       }
-      // ග්‍රහලෝක
       spaceElements.push({ type: 'planet', x: canvas.width * 0.15, y: canvas.height * 0.25, r: 25, color: 'rgba(155, 93, 229, 0.2)', pulse: 0 });
       spaceElements.push({ type: 'planet', x: canvas.width * 0.8, y: canvas.height * 0.75, r: 40, color: 'rgba(0, 245, 212, 0.15)', pulse: Math.PI });
     }
     
     function drawSpace() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
       spaceElements.forEach(el => {
         if(el.type === 'star') {
           el.o += el.speed; if(el.o > 1 || el.o < 0) el.speed = -el.speed;
