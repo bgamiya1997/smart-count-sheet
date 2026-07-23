@@ -5,71 +5,282 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⚡ SMART COUNT SHEET - ULTIMATE LIVE COSMOS</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Newspaper Inspired Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=UnifrakturMaguntia&family=Cinzel:wght@700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   
   <style>
     * { box-sizing: border-box; }
-    body { background: #020208; color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 30px 15px; overflow-x: hidden; position: relative; }
     
-    #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+    body { 
+      background-color: #f4f1ea; 
+      color: #111111; 
+      font-family: 'Newsreader', Georgia, serif; 
+      margin: 0; 
+      padding: 20px 15px; 
+      overflow-x: hidden; 
+      position: relative; 
+    }
     
+    /* Original Canvas for Space logic (Preserved rendering) */
+    #bg-canvas { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: -1; 
+      pointer-events: none; 
+      opacity: 0.15; /* Subtly blended into paper texture */
+    }
+    
+    /* Newspaper Paper Texture Overlay */
     body::before {
-      content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at 20% 30%, rgba(155, 93, 229, 0.15) 0%, transparent 60%),
-                  radial-gradient(circle at 80% 70%, rgba(0, 245, 212, 0.12) 0%, transparent 60%),
-                  radial-gradient(circle at 50% 40%, rgba(255, 51, 102, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 85% 20%, rgba(0, 187, 249, 0.1) 0%, transparent 40%);
-      z-index: -2; pointer-events: none; animation: spacePulse 12s ease-in-out infinite alternate;
+      content: ''; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background-image: radial-gradient(#111 0.5px, transparent 0.5px), radial-gradient(#111 0.5px, #f4f1ea 0.5px);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      opacity: 0.03;
+      z-index: -2; 
+      pointer-events: none; 
     }
-    @keyframes spacePulse { 
-      0% { transform: scale(1) rotate(0deg); opacity: 0.8; } 
-      100% { transform: scale(1.08) rotate(3deg); opacity: 1; } 
+    
+    /* Header Container - Editorial Banner */
+    .header-container { 
+      text-align: center; 
+      margin-bottom: 25px; 
+      position: relative; 
+      z-index: 2; 
+      border-bottom: 3px double #111;
+      border-top: 4px solid #111;
+      padding: 18px 0 12px 0;
+      max-width: 1600px;
+      margin-left: auto;
+      margin-right: auto;
     }
     
-    .header-container { text-align: center; margin-bottom: 45px; position: relative; z-index: 2; }
-    .main-title { font-family: 'Orbitron', sans-serif; font-size: 44px; font-weight: 900; letter-spacing: 10px; margin: 0; text-transform: uppercase; background: linear-gradient(45deg, #00f5d4 0%, #00bbf9 25%, #9b5de5 50%, #f3e5ab 75%, #00f5d4 100%); background-size: 400% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: futuristicColorShift 8s ease infinite; filter: drop-shadow(0 2px 25px rgba(0, 245, 212, 0.3)); }
-    @keyframes futuristicColorShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    .subtitle { font-family: 'Space Grotesk', sans-serif; font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 6px; margin-top: 12px; font-weight: 500; opacity: 0.8; }
+    .header-date {
+      font-family: 'Newsreader', serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 1px solid #111;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+    }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 45px; max-width: 1400px; margin-left: auto; margin-right: auto; position: relative; z-index: 2; }
-    .card { background: rgba(4, 6, 15, 0.45); backdrop-filter: blur(25px); border-radius: 16px; padding: 16px 20px; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 110px; border: 1.5px solid rgba(255, 255, 255, 0.08); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; overflow: hidden; }
-    .card:hover { transform: translateY(-8px) scale(1.02); }
+    .main-title { 
+      font-family: 'Playfair Display', serif; 
+      font-size: 52px; 
+      font-weight: 900; 
+      letter-spacing: 2px; 
+      margin: 0; 
+      text-transform: uppercase; 
+      color: #111111;
+      line-height: 1;
+      text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
+    }
     
-    .card.top { border-color: rgba(212, 175, 55, 0.3); box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05), 0 10px 30px rgba(0,0,0,0.5); }
-    .card.top::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.25), transparent 70%); pointer-events: none; }
-    
-    .card.bottom { border-color: rgba(255, 51, 102, 0.3); box-shadow: inset 0 0 15px rgba(255, 51, 102, 0.05), 0 10px 30px rgba(0,0,0,0.5); }
-    .card.bottom::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, rgba(255, 51, 102, 0.25), transparent 70%); pointer-events: none; }
-    
-    .card.progress-box { border-color: rgba(0, 245, 212, 0.3); box-shadow: inset 0 0 15px rgba(0, 245, 212, 0.05), 0 10px 30px rgba(0,0,0,0.5); }
-    .card.progress-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, rgba(0, 245, 212, 0.25), transparent 70%); pointer-events: none; }
+    .subtitle { 
+      font-family: 'Cinzel', serif; 
+      font-size: 13px; 
+      color: #333333; 
+      text-transform: uppercase; 
+      letter-spacing: 4px; 
+      margin-top: 8px; 
+      font-weight: 700; 
+    }
 
-    .card-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 2; }
-    .card-val { font-size: 24px; font-weight: 800; color: #ffffff; font-family: 'Space Grotesk', sans-serif; position: relative; z-index: 2; }
+    /* Stats Grid - Breaking News Columns */
+    .stats-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+      gap: 20px; 
+      margin-bottom: 30px; 
+      max-width: 1600px; 
+      margin-left: auto; 
+      margin-right: auto; 
+      position: relative; 
+      z-index: 2; 
+    }
+    
+    .card { 
+      background: #fdfbf7; 
+      border: 1px solid #111; 
+      border-radius: 0px; 
+      padding: 16px 20px; 
+      position: relative; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+      height: 115px; 
+      box-shadow: 4px 4px 0px #111;
+      transition: all 0.2s ease; 
+      cursor: pointer; 
+      overflow: hidden; 
+    }
+    
+    .card:hover { 
+      transform: translate(-2px, -2px); 
+      box-shadow: 6px 6px 0px #111;
+    }
+    
+    .card::before {
+      content: 'DAILY BULLETIN';
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-size: 8px;
+      font-family: sans-serif;
+      font-weight: 800;
+      letter-spacing: 1px;
+      opacity: 0.3;
+    }
 
-    .table-container { background: rgba(4, 6, 15, 0.55); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; overflow-x: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.8); max-width: 1600px; margin-left: auto; margin-right: auto; position: relative; z-index: 2; }
-    table { width: 100%; border-collapse: collapse; min-width: 1400px; }
+    .card.top { border: 2px solid #1b4332; background: #f4f9f4; }
+    .card.bottom { border: 2px solid #721c24; background: #fdf2f2; }
+    .card.progress-box { border: 2px solid #111; background: #fff; }
+
+    .card-label { 
+      font-family: 'Playfair Display', serif;
+      font-size: 12px; 
+      color: #111; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      font-weight: 800; 
+      margin-bottom: 4px; 
+      position: relative; 
+      z-index: 2; 
+      border-bottom: 1px solid #111;
+      padding-bottom: 2px;
+    }
     
-    th, td { border: 1px solid rgba(255, 255, 255, 0.08); padding: 15px 12px; text-align: center; }
+    .card-val { 
+      font-size: 26px; 
+      font-weight: 900; 
+      color: #111111; 
+      font-family: 'Playfair Display', serif; 
+      position: relative; 
+      z-index: 2; 
+    }
+
+    /* Table Container - Editorial Gazette Style */
+    .table-container { 
+      background: #fdfbf7; 
+      border: 2px solid #111; 
+      border-radius: 0px; 
+      overflow-x: auto; 
+      box-shadow: 6px 6px 0px #111; 
+      max-width: 1600px; 
+      margin-left: auto; 
+      margin-right: auto; 
+      position: relative; 
+      z-index: 2; 
+    }
     
-    th { font-family: 'Space Grotesk', sans-serif; background: rgba(2, 3, 8, 0.92); color: #00bbf9; font-size: 12px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid rgba(0, 245, 212, 0.4); }
-    td { font-size: 13px; font-weight: 500; color: #cbd5e1; background: rgba(4, 6, 15, 0.25); }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      min-width: 1400px; 
+    }
     
-    tr:hover td { background: rgba(0, 187, 249, 0.08) !important; color: #ffffff; border-color: rgba(0, 245, 212, 0.2); }
+    th, td { 
+      border: 1px solid #111; 
+      padding: 12px 10px; 
+      text-align: center; 
+    }
     
-    .num-col { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
-    .se-negative { color: #ff3366; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
-    .se-positive { color: #2ecc71; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    th { 
+      font-family: 'Playfair Display', serif; 
+      background: #111111; 
+      color: #f4f1ea; 
+      font-size: 13px; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 1px;
+      border: 1px solid #111;
+    }
+    
+    td { 
+      font-size: 14px; 
+      font-weight: 600; 
+      color: #111; 
+      background: transparent; 
+      font-family: 'Newsreader', serif;
+    }
+    
+    tr:nth-child(even) td {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    tr:hover td { 
+      background: #e9e4d9 !important; 
+      color: #000000; 
+    }
+    
+    .num-col { 
+      font-family: 'Newsreader', serif; 
+      font-weight: 700; 
+    }
+    
+    .se-negative { 
+      color: #b71c1c; 
+      font-weight: 800; 
+      font-family: 'Newsreader', serif; 
+      background: #fbe9e7;
+      padding: 2px 6px;
+    }
+    
+    .se-positive { 
+      color: #1b5e20; 
+      font-weight: 800; 
+      font-family: 'Newsreader', serif; 
+      background: #e8f5e9;
+      padding: 2px 6px;
+    }
+    
     .status-emoji { font-size: 20px; }
 
-    .particle-fx { position: fixed; pointer-events: none; z-index: 99999; font-size: 32px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); animation: fallAndSpin 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+    /* Particles Effect Overlay */
+    .particle-fx { 
+      position: fixed; 
+      pointer-events: none; 
+      z-index: 99999; 
+      font-size: 32px; 
+      filter: drop-shadow(2px 2px 0px #000); 
+      animation: fallAndSpin 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+    }
+    
     @keyframes fallAndSpin { 
       0% { transform: translateY(-10vh) translateX(0) scale(0) rotate(0deg); opacity: 0; } 
       15% { opacity: 1; transform: translateY(10vh) translateX(var(--x-offset)) scale(1.4) rotate(45deg); } 
       100% { transform: translateY(105vh) translateX(calc(var(--x-offset) * 2)) scale(0.6) rotate(720deg); opacity: 0; } 
     }
 
-    .footer-credits { text-align: center; font-size: 11px; color: #00f5d4; margin-top: 50px; padding: 20px; letter-spacing: 3px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 15px rgba(0, 245, 212, 0.6); }
+    .footer-credits { 
+      text-align: center; 
+      font-size: 12px; 
+      color: #111; 
+      margin-top: 40px; 
+      padding: 15px; 
+      letter-spacing: 4px; 
+      text-transform: uppercase; 
+      font-weight: 900; 
+      font-family: 'Cinzel', serif;
+      border-top: 2px solid #111;
+      max-width: 1600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
@@ -77,23 +288,28 @@
   <canvas id="bg-canvas"></canvas>
 
   <div class="header-container">
+    <div class="header-date">
+      <span>EDITION: LIVE REALTIME</span>
+      <span>THE DAILY RETAIL GAZETTE</span>
+      <span>PRICE: FREE</span>
+    </div>
     <div class="main-title">SMART COUNT SHEET</div>
     <div class="subtitle">Realtime Retail Execution Control Portal</div>
   </div>
 
   <div class="stats-grid">
     <div class="card top" onclick="triggerVictoryCelebration()">
-      <div class="card-label" style="color: #d4af37;">🏆 TOP PERFORMER (DENO)</div>
+      <div class="card-label" style="color: #1b4332;">🏆 TOP PERFORMER (DENO)</div>
       <div class="card-val" id="top-perf">Connecting...</div>
     </div>
     
     <div class="card bottom" onclick="triggerRageExplosion()">
-      <div class="card-label" style="color: #ff3366;">⚠️ LOWEST OUTPUT (DENO)</div>
+      <div class="card-label" style="color: #721c24;">⚠️ LOWEST OUTPUT (DENO)</div>
       <div class="card-val" id="bot-perf">Connecting...</div>
     </div>
     
     <div class="card progress-box" id="team-card" onclick="playCustomSound()">
-      <div class="card-label">⚡ TEAM TOTAL DENO</div>
+      <div class="card-label" style="color: #111;">⚡ TEAM TOTAL DENO</div>
       <div class="card-val" id="total-prog">Connecting...</div>
     </div>
   </div>
@@ -110,7 +326,7 @@
           <th>Voting Pricing</th>
           <th>E/Masking</th>
           <th>R/Masking</th>
-          <th style="color: #00f5d4;">Masking PL</th>
+          <th style="background: #222; color: #fff;">Masking PL</th>
           <th>Stitching</th>
           <th>Total Prob</th>
           <th>Total Deno</th>
@@ -118,7 +334,7 @@
         </tr>
       </thead>
       <tbody id="table-body">
-        <tr><td colspan="13" style="text-align:center; padding:50px;">INITIALIZING RE-CONFIGURED CORE LIVE MATRIX...</td></tr>
+        <tr><td colspan="13" style="text-align:center; padding:50px; font-weight: bold; font-family: 'Playfair Display', serif;">INITIALIZING RE-CONFIGURED CORE LIVE MATRIX...</td></tr>
       </tbody>
     </table>
   </div>
@@ -225,37 +441,37 @@
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td style="color: #64748b;">${gid}</td>
-            <td style="color:#fff; font-weight:600; text-align:left; padding-left:20px;">${name}</td>
-            <td class="num-col" style="color: #64748b;">${target}</td>
+            <td style="color: #444; font-weight: bold;">${gid}</td>
+            <td style="color:#111; font-weight:700; text-align:left; padding-left:20px; font-family:'Playfair Display', serif;">${name}</td>
+            <td class="num-col" style="color: #444;">${target}</td>
             <td class="${seClass}">${se}</td>
-            <td class="num-col" style="color: #00bbf9;">${offP}</td>
-            <td class="num-col" style="color: #9b5de5;">${votP}</td>
-            <td class="num-col" style="color: #00bbf9;">${eMsk}</td>
-            <td class="num-col" style="color: #00bbf9;">${rMsk}</td>
-            <td class="num-col" style="color:#00f5d4;">${mskPL}</td>
-            <td class="num-col" style="color: #f3e5ab;">${stch}</td>
-            <td class="num-col" style="color:#00bbf9;">${tProb}</td>
-            <td class="num-col" style="color:#ffffff;">${tDenoRaw.toFixed(3)}</td>
+            <td class="num-col" style="color: #111;">${offP}</td>
+            <td class="num-col" style="color: #111;">${votP}</td>
+            <td class="num-col" style="color: #111;">${eMsk}</td>
+            <td class="num-col" style="color: #111;">${rMsk}</td>
+            <td class="num-col" style="color:#111; font-weight: bold; background: rgba(0,0,0,0.03);">${mskPL}</td>
+            <td class="num-col" style="color: #111;">${stch}</td>
+            <td class="num-col" style="color:#111;">${tProb}</td>
+            <td class="num-col" style="color:#111; font-weight: 800;">${tDenoRaw.toFixed(3)}</td>
             <td class="status-emoji">${row.statusEmoji}</td>
           `;
           tableBody.appendChild(tr);
         });
 
         document.getElementById('top-perf').innerHTML = `
-          <span style="font-size:13px; color:#cbd5e1; display:block; font-weight:500;">${topName}</span>
-          <span style="color:#d4af37;">${maxDeno.toFixed(3)}</span>
+          <span style="font-size:13px; color:#111; display:block; font-weight:600; font-family:'Newsreader', serif;">${topName}</span>
+          <span style="color:#1b4332;">${maxDeno.toFixed(3)}</span>
         `;
         document.getElementById('bot-perf').innerHTML = `
-          <span style="font-size:13px; color:#cbd5e1; display:block; font-weight:500;">${bottomName}</span>
-          <span style="color:#ff3366;">${minDeno.toFixed(3)}</span>
+          <span style="font-size:13px; color:#111; display:block; font-weight:600; font-family:'Newsreader', serif;">${bottomName}</span>
+          <span style="color:#721c24;">${minDeno.toFixed(3)}</span>
         `;
         document.getElementById('total-prog').innerText = totalDenoSum.toFixed(3);
 
       } catch (e) { console.error("Sync Error:", e); }
     }
 
-    /* 🔊 TOP PERFORMER සඳහා නව ශබ්දය */
+    /* 🔊 TOP PERFORMER සඳහා ශබ්දය */
     function triggerVictoryCelebration() { 
       const audio = new Audio('https://www.myinstants.com/media/sounds/kanawa-thowa.mp3');
       audio.play().catch(e => console.log("Sound play blocked until user interaction."));
@@ -287,8 +503,8 @@
       for(let i=0; i<100; i++) {
         spaceElements.push({ type: 'star', x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5, o: Math.random(), speed: 0.01 + Math.random()*0.02 });
       }
-      spaceElements.push({ type: 'planet', x: canvas.width * 0.15, y: canvas.height * 0.25, r: 25, color: 'rgba(155, 93, 229, 0.2)', pulse: 0 });
-      spaceElements.push({ type: 'planet', x: canvas.width * 0.8, y: canvas.height * 0.75, r: 40, color: 'rgba(0, 245, 212, 0.15)', pulse: Math.PI });
+      spaceElements.push({ type: 'planet', x: canvas.width * 0.15, y: canvas.height * 0.25, r: 25, color: 'rgba(0, 0, 0, 0.1)', pulse: 0 });
+      spaceElements.push({ type: 'planet', x: canvas.width * 0.8, y: canvas.height * 0.75, r: 40, color: 'rgba(0, 0, 0, 0.08)', pulse: Math.PI });
     }
     
     function drawSpace() {
@@ -296,13 +512,13 @@
       spaceElements.forEach(el => {
         if(el.type === 'star') {
           el.o += el.speed; if(el.o > 1 || el.o < 0) el.speed = -el.speed;
-          ctx.fillStyle = `rgba(255,255,255,${Math.abs(el.o)})`;
+          ctx.fillStyle = `rgba(0,0,0,${Math.abs(el.o)})`;
           ctx.beginPath(); ctx.arc(el.x, el.y, el.r, 0, Math.PI*2); ctx.fill();
         } else if(el.type === 'planet') {
           el.pulse += 0.005;
           let currentR = el.r + Math.sin(el.pulse) * 2;
           let grad = ctx.createRadialGradient(el.x, el.y, 0, el.x, el.y, currentR);
-          grad.addColorStop(0, el.color); grad.addColorStop(0.8, 'rgba(4,6,15,0)');
+          grad.addColorStop(0, el.color); grad.addColorStop(0.8, 'rgba(244,241,234,0)');
           ctx.fillStyle = grad;
           ctx.beginPath(); ctx.arc(el.x, el.y, currentR, 0, Math.PI*2); ctx.fill();
         }
