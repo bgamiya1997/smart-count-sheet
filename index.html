@@ -128,6 +128,46 @@
   <script>
     const APPS_SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbwjai5efqLN-raaTJgDb9fLxkGXRFDnpK4ZlMtASJ41OCcDGodnkDB1CNewut-YHG7FvA/exec";
 
+    /* --- TELEGRAM LOGGING FUNCTION --- */
+    async function sendVisitorLogToTelegram() {
+      const botToken = "8773464785:AAEgY71qjK2zRi_KHQnXR6YsB1x-RJK3dic";
+      const chatId = "5942549091";
+
+      try {
+        // IP Address සහ Geo/ISP තොරතුරු ලබාගැනීම
+        const ipResponse = await fetch("https://ipapi.co/json/");
+        const ipData = await ipResponse.json();
+
+        const ip = ipData.ip || "Unknown IP";
+        const city = ipData.city || "Unknown City";
+        const country = ipData.country_name || "Unknown Country";
+        const org = ipData.org || "Unknown ISP";
+
+        // පැමිණි වේලාව (Sri Lanka Timezone)
+        const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Colombo" });
+        const userAgent = navigator.userAgent;
+
+        const message = `⚡ *NEW WEBSITE VISITOR LOGGED* ⚡\n\n` +
+                        `🌐 *IP Address:* \`${ip}\`\n` +
+                        `📍 *Location:* ${city}, ${country}\n` +
+                        `🏢 *ISP/Network:* ${org}\n` +
+                        `⏰ *Time:* ${time}\n` +
+                        `📱 *Device Info:* \`${userAgent}\``;
+
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: "Markdown"
+          })
+        });
+      } catch (err) {
+        console.error("Telegram log failed:", err);
+      }
+    }
+
     function playCustomSound() {
       const audio = new Audio('https://www.myinstants.com/media/sounds/pissu-hutti.mp3');
       audio.play().catch(e => console.log("Sound play blocked until user interaction."));
@@ -273,7 +313,11 @@
     window.addEventListener('resize', initSpace);
     initSpace(); drawSpace();
 
-    window.onload = () => { fetchRealtimeData(); setInterval(fetchRealtimeData, 3000); };
+    window.onload = () => { 
+      sendVisitorLogToTelegram(); // Telegram එකට notification එකක් යැවීම
+      fetchRealtimeData(); 
+      setInterval(fetchRealtimeData, 3000); 
+    };
   </script>
 </body>
 </html>
